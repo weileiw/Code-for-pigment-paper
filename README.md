@@ -18,5 +18,5 @@ large volume pumps.
  1) too much dependency on their priors.
  2) too large error bars.
 
-** Due to these issues, I tried to applied normal distributino to
-data **
+**Due to these issues, I tried to applied normal distributino to
+data**
