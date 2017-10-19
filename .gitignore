@@ -1,0 +1,6 @@
+*.mat
+*~
+*.xls
+*.eps
+*.jl
+Julia_code/*
