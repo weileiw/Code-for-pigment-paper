@@ -10,7 +10,8 @@ large volume pumps.
  This is the original model, with objective functions weighted using 
  data's own standard deviations. Large particle divergence is modeled
  based on Krist et al paper. Martin Curve exponential is optimized.
- Different from Krist et al paper is here we use particle 
+ Different from Krist et al paper~~(**function buildPFD_v2**)~~ is 
+ here we use particle 
  disaggregation rate constant as the loss term of large particles.
 
  What I found here is the respiration rate constant of both Chla and
