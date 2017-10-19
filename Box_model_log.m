@@ -31,10 +31,10 @@ d  = 150;    % disaggregation rate
 p.eta = 1;     % coefficient to convert conc. to production rate
 
 load xhat_log_var_SV.mat
-%alpha = linspace(0.1,1,20);
-%beta = linspace(1,10,20);
-alpha = 0;%R.alpha;
-beta  = 1;%R.beta;
+alpha = linspace(0.1,1,20);
+beta = linspace(1,10,20);
+%alpha = 0;%R.alpha;
+%beta  = 1;%R.beta;
 [X,Y] = meshgrid(alpha,beta);
 
 logZ = 0*X;
@@ -76,7 +76,7 @@ end
 imax = find(logZ(:)==max(logZ(:)));
 p.alpha = X(imax);
 p.beta  = Y(imax);
-keyboard
+%keyboard
 [xhat,fval,exitflag] = fminunc(L,x0,options);
 [f,dfdx,d2fdx2] = neglogpost_log(xhat,p,grd,M2d);
 HH = d2fdx2;
@@ -92,4 +92,4 @@ R.xhat = exp(xhat);
 R.alpha = p.alpha;
 R.beta = p.beta;
 fname = sprintf('xhat_log_var_SV');
-save(fname,'R');
+%save(fname,'R');
