@@ -35,10 +35,10 @@ Martin curve exponential (*b*), POC remineralization rate constant
 (*k1*), small particle aggregation rate constant (*a*), and large 
 particle disaggregation rate constant (*b*).
 
-*b*  = 0.91$^{+0.16}_{-0.14}$;
-*k1* = 1.12$^{0.81}_{0.47}$;
-*a*  = 2.50$^{1.80}_{1.05}$;
-*b*  = 53.00$^{36.88}_{21.75}$;
+*b*  = 0.91$^{+0.16}_{-0.14}$; 
+*k1* = 1.12$^{0.81}_{0.47}$; 
+*a*  = 2.50$^{1.80}_{1.05}$; 
+*b*  = 53.00$^{36.88}_{21.75}$; 
 
 
 ### Box_model_log.m
