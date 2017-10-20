@@ -23,11 +23,11 @@ phyeopigment are not well constrained because
 
 > *b*  = 0.9690$^{0.33}_{0.25}$;
 
-> *k1* = 1.1176$^{1.67}_{0.67}$
+> *r1* = 1.1176$^{1.67}_{0.67}$
 
-> *k2* = 1.0000$^{3.58}_{0.78}$
+> *r2* = 1.0000$^{3.58}_{0.78}$
 
-> *k3* = 1.0000$^{3.58}_{0.78}$
+> *r3* = 1.0000$^{3.58}_{0.78}$
 
 > *a*  = 2.7893$^{4.21}_{1.68}$
 
@@ -36,11 +36,11 @@ phyeopigment are not well constrained because
 To compare, here are the priors for each parameter 
 > *b_prior*  = 0.84;
 
-> *k1_prior* = 1.00;
+> *r1_prior* = 1.00;
 
-> *k2_prior* = 1.00;
+> *r2_prior* = 1.00;
 
-> *k3_prior* = 1.00;
+> *r3_prior* = 1.00;
 
 > *a_prior*  = 3.00;
 
@@ -57,12 +57,12 @@ Here comes the following model
 
 In this model, only four parameters are optimized, that are 
 Martin curve exponential (*b*), POC remineralization rate constant
-(*k1*), small particle aggregation rate constant (*a*), and large 
+(*r1*), small particle aggregation rate constant (*a*), and large 
 particle disaggregation rate constant (*b*).
 
 >*b*  = 0.91$^{+0.16}_{-0.14}$; 
 
->*k1* = 1.12$^{0.81}_{0.47}$; 
+>*r1* = 1.12$^{0.81}_{0.47}$; 
 
 >*a*  = 2.50$^{1.80}_{1.05}$; 
 
@@ -96,11 +96,11 @@ Example
 
 Sinking = 100 m/d
 
-> *k1* = 19.1857
+> *r1* = 19.1857
 
-> *k2* = 1.0169
+> *r2* = 1.0169
 
-> *k3* = 1.0001
+> *r3* = 1.0001
 
 > *a*  = 3.0649
 
@@ -108,16 +108,16 @@ Sinking = 100 m/d
 
 Sinking = 200 m/d
 
-> *k1*  = 38.3702
+> *r1*  = 38.3702
 
-> *k2*  = 1.0823
+> *r2*  = 1.0823
 
-> *k3*  = 1.0010
+> *r3*  = 1.0010
 
 > *a*   = 2.8700
 
 > *b*   = 229.9081
 
-As in the variable sinking speed model, *k2* and *k3* are not well constrained by the model.
+As in the variable sinking speed model, *r2* and *r3* are not well constrained by the model.
 
 
