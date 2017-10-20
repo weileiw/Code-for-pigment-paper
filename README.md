@@ -68,6 +68,8 @@ particle disaggregation rate constant (*b*).
 
 >*b*  = 53.00$^{36.88}_{21.75}$; 
 
+This is the model that I finally used in the paper.
+
 
 ### Box_model_log.m
 
