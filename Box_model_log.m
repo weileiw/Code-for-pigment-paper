@@ -38,7 +38,7 @@ beta = linspace(1,10,20);
 [X,Y] = meshgrid(alpha,beta);
 
 logZ = 0*X;
-x0 = R.xhat(2:end);
+x0 = R.xhat;
 x0 = log(x0);
 nip = length(x0);
 for jj = 1:length(X(:))

@@ -10,7 +10,7 @@ large volume pumps.
  This is the original model, with objective functions weighted using 
  data's own standard deviations. Large particle divergence is modeled
  based on Krist et al paper. Martin Curve exponential is optimized.
- Different from Krist et al paper~~(**function buildPFD_v2**)~~ is 
+ Different from Krist et al paper *(**function buildPFD_v2**)* is 
  here we use particle 
  disaggregation rate constant as the loss term of large particles.
 
@@ -20,4 +20,8 @@ large volume pumps.
  2) too large error bars.
 
 **Due to these issues, I tried to applied normal distributino to
-data**
+data. Here come Box_model_log**
+
+This time I get slightly better model to observation fit. But 
+the finial Hessian matrix is close to zero. try to fix it.
+
