@@ -73,16 +73,47 @@ particle disaggregation rate constant (*b*).
 
 **Use with neglogpost_log.m buildPFD_v2.m**
 
-This time I get slightly better model to observation fit. But 
-the finial Hessian matrix is close to zero. try to fix it.
-
-The Hessian problem can be fixed by using prior constrain on 
-parameters. However, the error bars are huge. 
+The error bars are huge. 
 
 
-### Box_cons_SV_log.m 
+### Box_cons_SV.m 
 
-Model with a constant sinking speed.
+**Use with negelogpost_cons_SV.m; PFD_cond_SV.m**
 
+Since Armstrong et al., (2009) and Xue et al., (2009) have demonstrated that particles 
+caught using sediment traps are sinking at a constant speed. The code here is to test 
+if a constant sinking speed for large particles can fit the data better. However, the 
+model does not have a unique solution. Sinking speed is positively correlated with particle
+exchange rates. This is not hard to understand because fast sinking particles with 
+fast exchange rates have the same effect with slow sinking particles having slow
+exchange rates.
+
+Example
+
+Sinking = 100 m/d
+
+> *k1* = 19.1857
+
+> *k2* = 1.0169
+
+> *k3* = 1.0001
+
+> *a*  = 3.0649
+
+> *d*  = 124.0919
+
+Sinking = 200 m/d
+
+> *k1*  = 38.3702
+
+> *k2*  = 1.0823
+
+> *k3*  = 1.0010
+
+> *a*   = 2.8700
+
+> *b*   = 229.9081
+
+As in the variable sinking speed model, *k2* and *k3* are not well constrained by the model.
 
 

@@ -21,34 +21,39 @@ idata = length(p.Chl(2:end));
 depth = p.dp;
 jj = length(depth);
 M2d = ones(1,jj);
-
+dpa = 365;
 grd = buildgrd(p,M2d);
-p.eta = 1.2;     % coefficient to convert conc. to production rate
+p.eta = 1.0;     % coefficient to convert conc. to production rate
+p.w   = 200;     % sinking speed (m/d);
+p.r1  = 1.0/dpa; % POC remi. rate constant [d^-1].
+p.r2  = 1.0/dpa; % phyeo remi. rate constant [d^-1].
+p.r3  = 1.0/dpa; % Chl->phyeo rate constant [d^-1].
+p.a   = 3.0/dpa; % aggregation rate constant [d^-1]. 
+p.d   = 150/dpa; % disaggregation rate constant [d^-1].
 
-load xhat_log_cons_SV.mat
-%alpha = 0;%R.alpha;
-%beta  = 1;%R.beta;
+
 alpha = linspace(0.5,1.5,20);
-beta = linspace(50,70,20);
+beta  = linspace(50,70,20);
 
 [X,Y] = meshgrid(alpha,beta);
 
 logZ = 0*X;
-x0 = log([150;R.xhat]); % per day
 
+x0  = log([p.r1;p.r2;p.r3;p.a;p.d]);
 nip = length(x0);
+
 for jj = 1:length(X(:))
 
     p.alpha = X(jj);
     p.beta  = Y(jj);
     L = @(x) neglogpost_cons_SV(x,p,grd,M2d);
-    
+
     options = optimoptions(@fminunc,'Algorithm','trust-region',...
-			   'GradObj','on','Hessian','on','Display','off',...
-			   'MaxFunEvals',1000,'MaxIter',1000,'TolX',1e-12,...
-			   'DerivativeCheck','off','FinDiffType', ...
-			   'central','TolFun',1e-12,'PrecondBandWidth',Inf);
-    
+        'GradObj','on','Hessian','on','Display','off',...
+        'MaxFunEvals',1000,'MaxIter',1000,'TolX',1e-12,...
+        'DerivativeCheck','off','FinDiffType', ...
+        'central','TolFun',1e-12,'PrecondBandWidth',Inf);
+
     [xhat,fval,exitflag] = fminunc(L,x0,options);
 
     [f,dfdx,d2fdx2] = neglogpost_cons_SV(xhat,p,grd,M2d);
@@ -71,7 +76,7 @@ end
 imax = find(logZ(:)==max(logZ(:)));
 p.alpha = X(imax);
 p.beta  = Y(imax);
-		   % recalcualte xhat based on optimal alpha and beta;
+% recalcualte xhat based on optimal alpha and beta;
 L = @(x) neglogpost_cons_SV(x,p,grd,M2d);
 [xhat,fval,exitflag] = fminunc(L,x0,options);
 
@@ -86,5 +91,5 @@ R.xhat = exp(xhat);
 R.alpha = p.alpha;
 R.beta = p.beta;
 R.logZ = logZ;
-%fname = sprintf('xhat_log_cons_SV');
-%save(fname,'R');
+fname = sprintf('xhat_cons_SV');
+save(fname,'R');
