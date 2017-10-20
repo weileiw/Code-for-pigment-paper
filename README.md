@@ -21,6 +21,18 @@ phyeopigment are not well constrained because
 1) too much dependency on their priors.
 2) too large error bars.
 
+> *b*  = 0.9690$^{0.33}_{0.25}$;
+
+> *k1* = 1.1176$^{1.67}_{0.67}$
+
+> *k2* = 1.0000$^{3.58}_{0.78}$
+
+> *k3* = 1.0000$^{3.58}_{0.78}$
+
+> *a*  = 2.7893$^{4.21}_{1.68}$
+
+> *d*  = 64.0167$^{92.86}_{37.89}$
+
 Due to these issues, I take values for r2 and r3 from references
 (Wang et al.,2017), and only optimize r1 (POC) remineralization
 rate constant.

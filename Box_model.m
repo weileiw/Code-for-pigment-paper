@@ -92,5 +92,5 @@ R.lowbar = (exp(xhat)-exp(xhat-error));
 R.xhat = exp(xhat);
 R.alpha = p.alpha;
 R.beta = p.beta;
-%fname = sprintf('xhat_var_SV');
-%save(fname,'R');
+fname = sprintf('xhat_var_SV');
+save(fname,'R');
