@@ -22,26 +22,26 @@ jj = length(depth);
 M2d = ones(1,jj);
 
 grd = buildgrd(p,M2d);
-b  = 0.84;   % Martin Curve exponential
-r1 = 1;      % remineralization rate
-r2 = 1;      % remineralization rate
-p.r3 = 2.1;
-a  = 3;      % aggregation rate
-d  = 150;    % disaggregation rate
-p.eta = 1;     % coefficient to convert conc. to production rate
+p.b   = 0.84;   % Martin Curve exponential
+p.r1  = 1;      % remineralization rate [y^[-1]];
+p.r2  = 1;      % remineralization rate [y^[-1]];
+p.r3  = 1;      % reminearlization rate [y^[-1]];
+p.a   = 3;      % aggregation rate      [y^[-1]];
+p.d   = 150;    % disaggregation rate   [y^[-1]];
 
-load Med_xhat_4P.mat
-%alpha = linspace(0.1,10,100);
-%beta = linspace(20,60,100);
-alpha = R.alpha;
-beta = R.beta;
+p.eta = 1;      % coefficient to convert conc. to production rate [dimensionless];
+
+alpha = linspace(0.1,10,100);
+beta  = linspace(20,60,100);
+
 [X,Y] = meshgrid(alpha,beta);
 
 logZ = 0*X;
-x0 = R.xhat;
-				%x0 = [b;r1;r2;r3;a;d];
-x0 = log(x0);
+
+x0  = [p.b;p.r1;p.a;p.b]; 
+x0  = log(x0);
 nip = length(x0);
+
 for jj = 1:length(X(:))
 
     p.alpha = X(jj);
@@ -50,15 +50,15 @@ for jj = 1:length(X(:))
     
     options = optimoptions(@fminunc,'Algorithm','trust-region',...
 			   'GradObj','on','Hessian','on','Display','off',...
-			   'MaxFunEvals',1000,'MaxIter',1000,'TolX',1e-7,...
+			   'MaxFunEvals',1000,'MaxIter',1000,'TolX',1e-9,...
 			   'DerivativeCheck','off','FinDiffType', ...
-			   'central','TolFun',1e-7,'PrecondBandWidth',Inf);
+			   'central','TolFun',1e-9,'PrecondBandWidth',Inf);
     
     [xhat,fval,exitflag] = fminunc(L,x0,options);
 
     [f,dfdx,d2fdx2] = neglogpost_4p(xhat,p,grd,M2d);
     HH = d2fdx2;
-    logZ(jj) = -f-0.5*log(det(HH))+6/2*log(p.alpha)+(6*idata)/2*log(p.beta);
+    logZ(jj) = -f-0.5*log(det(HH))+nip/2*log(p.alpha)+(6*idata)/2*log(p.beta);
 end
  
 %figure(2)
@@ -89,5 +89,5 @@ R.lowbar = (exp(xhat)-exp(xhat-error));
 R.xhat = exp(xhat);
 R.alpha = p.alpha;
 R.beta = p.beta;
-%fname = sprintf('Med_xhat_4P');
-%save(fname,'R');
+fname = sprintf('Med_xhat_4P');
+save(fname,'R');

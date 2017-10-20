@@ -5,7 +5,7 @@ d2fdx2 = zeros(nip,nip);
 dx = sqrt(-1)*eps.^3*eye(nip);
 
 prior = [-0.11;-1.15;-0;-0;1.70;2.85];
-U = d0([1/0.16;1/2.98;1/3.98;1/3.98;1/4.00;1/6.64]);
+U  = d0([1/0.16;1/2.98;1/3.98;1/3.98;1/4.00;1/6.64]);
 alpha = p.alpha;
 beta  = p.beta;
 
@@ -21,13 +21,13 @@ for ii = 1:nip
   [PFD,dPFDdb,dPFDdd] = buildPFD_v2(M2d,p,grd);
 
   iocn = find(M2d(:));
-  tmp = M2d;
+  tmp  = M2d;
   tmp(:,1) = 0;
-  ib = find(tmp(iocn));
+  ib   = find(tmp(iocn));
   
   [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d);
 
-%  ep = (x-prior);
+  ep = (x-prior);
   W  = speye(length(iocn)-1);
   jj = length(ib);
   
@@ -38,13 +38,6 @@ for ii = 1:nip
   Phy_mod = [M(4*jj+1:5*jj)];
   phy_mod = [M(5*jj+1:end)];
   
-  %e1 = (POC_mod-p.POC(2:end));
-  %e2 = (poc_mod-p.poc(2:end));
-  %e3 = (Chl_mod-p.Chl(2:end));
-  %e4 = (chl_mod-p.chl(2:end));
-  %e5 = (Phy_mod-p.Phyo(2:end));
-  %e6 = (phy_mod-p.phyo(2:end));
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
   e1 = log(POC_mod)-log(p.POC(2:end));
   e2 = log(poc_mod)-log(p.poc(2:end));
   e3 = log(Chl_mod)-log(p.Chl(2:end));
@@ -59,19 +52,8 @@ for ii = 1:nip
   f5 = 0.5*(e5.'*W*e5);
   f6 = 0.5*(e6.'*W*e6);
   f = f1+f2+f3+f4+f5+f6;
-  f = beta*f;%+0.5*alpha*(ep.'*U*ep);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %f1 = 0.5*(e1.'*W*e1)/p.POC_std;
-  %f2 = 0.5*(e2.'*W*e2)/p.poc_std;
-  %f3 = 0.5*(e3.'*W*e3)/p.Chl_std;
-  %f4 = 0.5*(e4.'*W*e4)/p.chl_std;
-  %f5 = 0.5*(e5.'*W*e5)/p.Phyo_std;
-  %f6 = 0.5*(e6.'*W*e6)/p.phyo_std;
-  %f = f1+f2+f3+f4+f5+f6;
-  %f = beta*f+0.5*alpha*(ep.'*U*ep);
-  % dfdx = e.'*W*dedx;
-  % dedx = dedC*dCdx;
-  % dCdx = dCdp*dpdx;
+  f = beta*f+0.5*alpha*(ep.'*U*ep);
+
   dpdx = diag(exp(x));
   
   de1dx = (1./POC_mod).*D(1:jj,:)*dpdx;
@@ -92,27 +74,27 @@ for ii = 1:nip
   de6dx = (1./phy_mod).*D(5*jj+1:6*jj,:)*dpdx;
   df6dx = (e6.'*W*de6dx);%/p.phyo_std;
 
-  dfdx = df1dx+df2dx+df3dx+df4dx+df5dx+df6dx;
-  dfdx = beta*(dfdx);%+alpha*ep.'*U;
+  dfdx  = df1dx+df2dx+df3dx+df4dx+df5dx+df6dx;
+  dfdx  = beta*(dfdx)+alpha*ep.'*U;
 
   dfdx_test(ii) = imag(f)./eps.^3;
-  d2fdx2(ii,:) = imag(dfdx)./eps.^3;
+  d2fdx2(ii,:)  = imag(dfdx)./eps.^3;
 
 end
 
-f = real(f);
+f    = real(f);
 dfdx = real(dfdx);
 
 O = [p.POC(2:end);p.poc(2:end);p.Chl(2:end);...
      p.chl(2:end);p.Phyo(2:end);p.phyo(2:end)];
 
-figure(1)
-loglog(real(M),O,'*',[1e-8:10],[1e-8:10])
+%figure(1)
+%loglog(real(M),O,'*',[1e-8:10],[1e-8:10])
 
-xlim([1e-8,10]);
-ylim([1e-8,10]);
-r2 = rsquare(real(M),O);
-txt = sprintf('R^2 = %.2f',r2);
+%xlim([1e-8,10]);
+%ylim([1e-8,10]);
+%r2 = rsquare(real(M),O);
+%txt = sprintf('R^2 = %.2f',r2);
 %text(0.01,1,txt)
 %xlabel('Model prediction (\mumol L^-^1)')
 %ylabel('Observation (\mumol L^-^1)')
@@ -128,15 +110,20 @@ function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
   eta = p.eta;
   
   jj = length(p.POC);
-  I = speye(jj);
+  I  = speye(jj);
   iocn = find(M2d(:));
-  tmp = M2d;
+  
+  % find out upper grid box index.
+  tmp  = M2d;
   tmp(:,2:end) = 0;
-  iu = find(tmp(iocn));
+  iu  = find(tmp(iocn));
+  
+  % find out lower grid index.
   tmp = M2d;
   tmp(:,1) = 0;
   ib = find(tmp(iocn));
   
+  % preparation for building Jacobian.
   L11 = d*I+PFD;       %dPOC_ldt
   L12 = -a*I;          %dPOC_ldt
   L21 = -d*I;          %dPOC_sdt
@@ -203,25 +190,25 @@ function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
   M      = mfactor(FM,rhs);
   N      = OBS*eta;
   
-  dL11dd = I+dPFDdd;    %dPOC_ldt
-  dL11db = dPFDdb;      %dPOC_ldt
-  dL12da = -I;          %dPOC_ldt
-  dL21dd = -I;          %dPOC_sdt
-  dL22da =  I;          %dPOC_sdt
-  dL22dr1 = I;          %dPOC_sdt
-  dL33dd = I+dPFDdd;    %dChl_ldt
-  dL33db = dPFDdb;      %dChl_ldt
-  dL34da = -I;          %dChl_ldt
-  dL43dd = -I;          %dChl_sdt
-  dL44da = I;           %dChl_sdt
-  dL44dr3 = I;          %dChl_sdt
-  dL55dd = I+dPFDdd;    %dPhe_ldt
-  dL55db = dPFDdb;      %dPhe_ldt
-  dL56da = -I;          %dPhe_ldt
+  dL11dd  = I+dPFDdd;   %dPOC_ldt
+  dL11db  = dPFDdb;     %dPOC_ldt
+  dL12da  = -I;         %dPOC_ldt
+  dL21dd  = -I;         %dPOC_sdt
+  dL22da  =  I;         %dPOC_sdt
+  dL22dr1 =  I;         %dPOC_sdt
+  dL33dd  =  I+dPFDdd;  %dChl_ldt
+  dL33db  =  dPFDdb;    %dChl_ldt
+  dL34da  = -I;         %dChl_ldt
+  dL43dd  = -I;         %dChl_sdt
+  dL44da  =  I;         %dChl_sdt
+  dL44dr3 =  I;         %dChl_sdt
+  dL55dd  =  I+dPFDdd;  %dPhe_ldt
+  dL55db  =  dPFDdb;    %dPhe_ldt
+  dL56da  = -I;         %dPhe_ldt
   dL64dr3 = -I;         %dPhe_sdt
-  dL65dd = -I;          %dPhe_sdt
-  dL66da = I;           %dPhe_sdt
-  dL66dr2 = I;          %dPhe_sdt
+  dL65dd  = -I;         %dPhe_sdt
+  dL66da  =  I;         %dPhe_sdt
+  dL66dr2 =  I;         %dPhe_sdt
 
   % dJdd -----------------
   dL11BBdd = dL11dd(ib,:);

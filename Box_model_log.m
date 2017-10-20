@@ -32,7 +32,7 @@ p.eta = 1;     % coefficient to convert conc. to production rate
 
 load xhat_log_var_SV.mat
 alpha = linspace(0.1,1,20);
-beta = linspace(1,10,20);
+beta  = linspace(0.1,1,20);
 %alpha = 0;%R.alpha;
 %beta  = 1;%R.beta;
 [X,Y] = meshgrid(alpha,beta);
