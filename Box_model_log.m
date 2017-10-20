@@ -14,23 +14,23 @@ p.POC_std  = std(p.POC);
 p.poc_std  = std(p.poc);
 p.Phyo_std = std(p.Phyo);
 p.phyo_std = std(p.phyo);
-idata = length(p.Chl);
-spy      = 365*24*60*60;
+idata      = length(p.Chl);
+
+spd        = 365;
 
 depth = p.dp;
-jj = length(depth);
+jj  = length(depth);
 M2d = ones(1,jj);
-
 grd = buildgrd(p,M2d);
-b  = 0.84;   % Martin Curve exponential
-r1 = 1;      % remineralization rate
-r2 = 1;      % remineralization rate
-r3 = 1;
-a  = 3;      % aggregation rate
-d  = 150;    % disaggregation rate
+
+p.b   = 0.84;   % Martin Curve exponential
+p.r1  = 1;      % remineralization rate
+p.r2  = 1;      % remineralization rate
+p.r3  = 1;
+p.a   = 3;      % aggregation rate
+p.d   = 150;    % disaggregation rate
 p.eta = 1;     % coefficient to convert conc. to production rate
 
-load xhat_log_var_SV.mat
 alpha = linspace(0.1,1,20);
 beta  = linspace(0.1,1,20);
 %alpha = 0;%R.alpha;
@@ -38,7 +38,8 @@ beta  = linspace(0.1,1,20);
 [X,Y] = meshgrid(alpha,beta);
 
 logZ = 0*X;
-x0 = R.xhat;
+
+x0 = [p.b;p.r1;p.r2;p.r3;p.a;p.d];
 x0 = log(x0);
 nip = length(x0);
 for jj = 1:length(X(:))
