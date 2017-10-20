@@ -46,9 +46,10 @@ To compare, here are the priors for each parameter
 
 > *d_prior*  = 150;
 
-Due to these issues, I take values for r2 and r3 from references
-(Wang et al.,2017), and only optimize r1 (POC) remineralization
-rate constant.
+Due to these issues, values of *r2* and *r3* are taken from references
+(Wang et al.,2017), and only *r1* (POC) remineralization rate constant 
+is optimized. 
+
 Here comes the following model
 
 ### Box_model_4p.m
@@ -68,7 +69,7 @@ particle disaggregation rate constant (*b*).
 
 >*b*  = 53.00$^{36.88}_{21.75}$; 
 
-This is the model that I finally used in the paper.
+This is the model that has been finally used in the paper.
 
 
 ### Box_model_log.m
