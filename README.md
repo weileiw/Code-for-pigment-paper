@@ -33,6 +33,19 @@ phyeopigment are not well constrained because
 
 > *d*  = 64.0167$^{92.86}_{37.89}$
 
+To compare, here are the priors for each parameter 
+> *b_prior*  = 0.84;
+
+> *k1_prior* = 1.00;
+
+> *k2_prior* = 1.00;
+
+> *k3_prior* = 1.00;
+
+> *a_prior*  = 3.00;
+
+> *d_prior*  = 150;
+
 Due to these issues, I take values for r2 and r3 from references
 (Wang et al.,2017), and only optimize r1 (POC) remineralization
 rate constant.
