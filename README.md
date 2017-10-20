@@ -75,7 +75,9 @@ This is the model that I finally used in the paper.
 
 **Use with neglogpost_log.m buildPFD_v2.m**
 
-The error bars are huge. 
+Due to the huge concentration ranges, lognormal distribution of concentrations are
+assumed in this model. However, the error bars are huge, and there is not significant 
+change to model versus observation correlation. This model is not used in the paper. 
 
 
 ### Box_cons_SV.m 
