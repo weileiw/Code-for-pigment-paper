@@ -35,6 +35,7 @@ Martin curve exponential *b*, POC remineralization rate constant
 *k1*, small particle aggregation rate constant (*a*), and large 
 particle disaggregation rate constant (*b*).
 
+0.91$^{+0.16}_{-0.14}$
 
 **Due to these issues, I tried to applied normal distributino to
 data. Here come Box_model_log**
