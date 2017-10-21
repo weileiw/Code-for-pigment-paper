@@ -3,5 +3,7 @@
 *.xls
 *.eps
 *.jl
+*.png
 Julia_code/*
 Junk
+
