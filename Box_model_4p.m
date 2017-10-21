@@ -31,14 +31,18 @@ p.d   = 150;    % disaggregation rate   [y^[-1]];
 
 p.eta = 1;      % coefficient to convert conc. to production rate [dimensionless];
 
-alpha = linspace(0.1,10,100);
-beta  = linspace(20,60,100);
+load xhat_4p.mat
+
+alpha = linspace(0,20,100);
+beta  = linspace(20,40,50);
+%alpha = R.alpha;
+%beta  = R.beta;
 
 [X,Y] = meshgrid(alpha,beta);
 
 logZ = 0*X;
-
-x0  = [p.b;p.r1;p.a;p.b]; 
+x0 = R.xhat;
+%x0  = [p.b;p.r1;p.a;p.b]; 
 x0  = log(x0);
 nip = length(x0);
 
@@ -67,12 +71,12 @@ end
 %set(gca,'XTickLabel',{'0','1','2','3','4','5','6','7','8','9','10'})
 %set(gca,'YTick',[20:5:60])
 %set(gca,'YTickLabel',{'20','25','30','35','40','45','50','55','60'})
-%text('Interpreter','latex','String','$$\Lambda = 6.12$$','Position',[35 55])
-%text('Interpreter','latex','String','$$\Gamma = 36.97$$','Position',[35 53])
+%text('Interpreter','latex','String','$$\Lambda = 5.66$$','Position',[15 36],'fontsize',16)
+%text('Interpreter','latex','String','$$\Gamma = 27.35$$','Position',[15 38],'fontsize',16)
 %text(5,55,'MedFlux')
 %xlabel('\Lambda-scaling factor for parameter')
 %ylabel('\Gamma-scaling factor for data')
-
+%set(gca,'fontsize',16)
 imax = find(logZ(:)==max(logZ(:)));
 p.alpha = X(imax);
 p.beta  = Y(imax);

@@ -30,11 +30,11 @@ a  = 3;      % aggregation rate
 d  = 150;    % disaggregation rate
 p.eta = 0.9;     % coefficient to convert conc. to production rate
 
-load xhat_log_var_SV.mat
-alpha = linspace(1,5,40);
-beta  = linspace(15,35,20);
-%alpha = 0;%R.alpha;
-%beta  = 1;%R.beta;
+load xhat_var_SV.mat
+%alpha = linspace(1,5,40);
+%beta  = linspace(15,35,20);
+alpha = R.alpha;
+beta  = R.beta;
 [X,Y] = meshgrid(alpha,beta);
 
 logZ = 0*X;
@@ -44,24 +44,24 @@ x0 = log(x0);
 nip = length(x0);
 for jj = 1:length(X(:))
 
-  p.alpha = X(jj);
-  p.beta  = Y(jj);
-  %fprintf('alpha = %3.3f',p.alpha)
-  L = @(x) neglogpost(x,p,grd,M2d);
-  
-  options = optimoptions(@fminunc,'Algorithm','trust-region',...
-			 'GradObj','on','Hessian','on','Display','off',...
-			 'MaxFunEvals',1000,'MaxIter',1000,'TolX',1e-9,...
-			 'DerivativeCheck','off','FinDiffType', ...
-			 'central','TolFun',1e-9,'PrecondBandWidth',Inf);
-  
-  [xhat,fval,exitflag] = fminunc(L,x0,options);
-  
-  [f,dfdx,d2fdx2] = neglogpost(xhat,p,grd,M2d);
-  HH = d2fdx2;
-  logZ(jj) = -f-0.5*log(det(HH))+6/2*log(p.alpha)+(6*idata)/2*log(p.beta);
+    p.alpha = X(jj);
+    p.beta  = Y(jj);
+    
+    L = @(x) neglogpost(x,p,grd,M2d);
+
+    options = optimoptions(@fminunc,'Algorithm','trust-region',...
+        'GradObj','on','Hessian','on','Display','off',...
+        'MaxFunEvals',1000,'MaxIter',1000,'TolX',1e-9,...
+        'DerivativeCheck','off','FinDiffType', ...
+        'central','TolFun',1e-9,'PrecondBandWidth',Inf);
+
+    [xhat,fval,exitflag] = fminunc(L,x0,options);
+
+    [f,dfdx,d2fdx2] = neglogpost(xhat,p,grd,M2d);
+    HH = d2fdx2;
+    logZ(jj) = -f-0.5*log(det(HH))+6/2*log(p.alpha)+(6*idata)/2*log(p.beta);
 end
- 
+
 %figure(2)
 %contourf(X,Y,logZ);colorbar
 %set(gca,'XTick',[1:1:40])

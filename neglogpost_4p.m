@@ -97,10 +97,13 @@ function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
     %r2 = rsquare(real(M),O);
     %txt = sprintf('R^2 = %.2f',r2);
     %text(0.01,1,txt)
-    %xlabel('Model prediction (\mumol L^-^1)')
-    %ylabel('Observation (\mumol L^-^1)')
+    %xlabel('Model prediction (\mumol L^-^1)','FontSize',16)
+    %ylabel('Observation (\mumol L^-^1)','FontSize',16)
+    %set(gca,'fontsize',16)
+    %set(findall(gca, 'Type', 'Line'),'LineWidth',2);
+    %print -depsc mod_vs_obs.eps
     %keyboard
-    %++++++++++++++++++++++++++++++++++++++++++++++
+    %%++++++++++++++++++++++++++++++++++++++++++++++
 function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
 
     r1 = p.r1;
