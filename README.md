@@ -23,11 +23,11 @@ phyeopigment are not well constrained because
 
 > *b*  = 0.9690$^{0.33}_{0.25}$;
 
-> *r1* = 1.1176$^{1.67}_{0.67}$
+> *d1* = 1.1176$^{1.67}_{0.67}$
 
-> *r2* = 1.0000$^{3.58}_{0.78}$
+> *d2* = 1.0000$^{3.58}_{0.78}$
 
-> *r3* = 1.0000$^{3.58}_{0.78}$
+> *d3* = 1.0000$^{3.58}_{0.78}$
 
 > *a*  = 2.7893$^{4.21}_{1.68}$
 
@@ -36,18 +36,18 @@ phyeopigment are not well constrained because
 To compare, here are the priors for each parameter 
 > *b_prior*  = 0.84;
 
-> *r1_prior* = 1.00;
+> *d1_prior* = 1.00;
 
-> *r2_prior* = 1.00;
+> *d2_prior* = 1.00;
 
-> *r3_prior* = 1.00;
+> *d3_prior* = 1.00;
 
 > *a_prior*  = 3.00;
 
 > *d_prior*  = 150;
 
-Due to these issues, values of *r2* and *r3* are taken from references
-(Wang et al.,2017), and only *r1* (POC) remineralization rate constant 
+Due to these issues, values of *d2* and *d3* are taken from references
+(Wang et al.,2017), and only *d1* (POC) remineralization rate constant 
 is optimized. 
 
 Here comes the following model
@@ -58,18 +58,18 @@ Here comes the following model
 
 In this model, only four parameters are optimized, that are 
 Martin curve exponential (*b*), POC remineralization rate constant
-(*r1*), small particle aggregation rate constant (*a*), and large 
+(*d1*), small particle aggregation rate constant (*a*), and large 
 particle disaggregation rate constant (*b*).
 
->*b*  = 0.91$^{+0.16}_{-0.14}$; 
+>*b*  = 0.91$^{+0.08}_{-0.07}$; 
 
->*r1* = 1.10$^{0.79}_{0.46}$; 
+>*d1* = 1.89$^{0.58}_{0.44}$; 
 
->*a*  = 2.56$^{1.83}_{1.07}$; 
+>*a*  = 4.64$^{1.46}_{1.11}$; 
 
->*b*  = 52.48$^{36.31}_{21.46}$; 
+>*b*  = 95.78$^{28.16}_{21.76}$; 
 
-This is the model that has been finally used in the paper.
+This is the model that is finally used in the paper.
 
 
 ### Box_model_log.m
@@ -89,19 +89,19 @@ Since Armstrong et al., (2009) and Xue et al., (2009) have demonstrated that par
 caught using sediment traps are sinking at a constant speed. The code here is to test 
 if a constant sinking speed for large particles can fit the data better. However, the 
 model does not have a unique solution. Sinking speed is positively correlated with particle
-exchange rates. This is not hard to understand because fast sinking particles with 
-fast exchange rates have the same effect with slow sinking particles having slow
-exchange rates.
+exchange rates (POC remineralization and disaggregation). This is not hard to understand 
+because fast sinking particles with fast exchange rates have the same effect with slow 
+sinking particles having slow exchange rates.
 
 Example
 
 Sinking = 100 m/d
 
-> *r1* = 19.1857
+> *d1* = 19.1857
 
-> *r2* = 1.0169
+> *d2* = 1.0169
 
-> *r3* = 1.0001
+> *d3* = 1.0001
 
 > *a*  = 3.0649
 
@@ -109,16 +109,16 @@ Sinking = 100 m/d
 
 Sinking = 200 m/d
 
-> *r1*  = 38.3702
+> *d1*  = 38.3702
 
-> *r2*  = 1.0823
+> *d2*  = 1.0823
 
-> *r3*  = 1.0010
+> *d3*  = 1.0010
 
 > *a*   = 2.8700
 
 > *b*   = 229.9081
 
-As in the variable sinking speed model, *r2* and *r3* are not well constrained by the model.
+As in the variable sinking speed model, *d2* and *d3* are not well constrained by the model.
 
 

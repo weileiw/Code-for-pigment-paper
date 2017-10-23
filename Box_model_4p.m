@@ -29,14 +29,16 @@ p.r3  = 1;      % Phyeopigment reminearlization rate [y^[-1]];
 p.a   = 3;      % aggregation rate      [y^[-1]];
 p.d   = 150;    % disaggregation rate   [y^[-1]];
 
-p.eta = 1;      % coefficient to convert conc. to production rate [dimensionless];
+p.eta = 0.8;      % coefficient to convert conc. to production rate [dimensionless];
 
-load xhat_4p.mat
+load xhat_4p_eta_decrease.mat
 
-alpha = linspace(0,20,100);
-beta  = linspace(20,40,50);
-%alpha = R.alpha;
-%beta  = R.beta;
+%alpha = linspace( 1,80,80); %range for testing eta;
+%beta  = linspace(16,40,50); %range for testing eta;
+%alpha = linspace(11,60,100); %range for eta = 1;
+%beta  = linspace(16,40,50); %range for eta = 1;
+alpha = R.alpha;
+beta  = R.beta;
 
 [X,Y] = meshgrid(alpha,beta);
 
@@ -66,21 +68,21 @@ for jj = 1:length(X(:))
 end
 
 %figure(2)
-%contourf(X,Y,logZ);colorbar
+contourf(X,Y,logZ);colorbar
 %set(gca,'XTick',[0:1:10])
 %set(gca,'XTickLabel',{'0','1','2','3','4','5','6','7','8','9','10'})
 %set(gca,'YTick',[20:5:60])
 %set(gca,'YTickLabel',{'20','25','30','35','40','45','50','55','60'})
-%text('Interpreter','latex','String','$$\Lambda = 5.66$$','Position',[15 36],'fontsize',16)
-%text('Interpreter','latex','String','$$\Gamma = 27.35$$','Position',[15 38],'fontsize',16)
+%text('Interpreter','latex','String','$$\Lambda = 21.89$$','Position',[50 35],'fontsize',16)
+%text('Interpreter','latex','String','$$\Gamma = 27.76$$','Position',[50 37],'fontsize',16)
 %text(5,55,'MedFlux')
-%xlabel('\Lambda-scaling factor for parameter')
-%ylabel('\Gamma-scaling factor for data')
-%set(gca,'fontsize',16)
+xlabel('\Lambda-scaling factor for parameter')
+ylabel('\Gamma-scaling factor for data')
+set(gca,'fontsize',16)
 imax = find(logZ(:)==max(logZ(:)));
 p.alpha = X(imax);
 p.beta  = Y(imax);
-
+% recalculate xhat based on optimized alpha and beta.
 [xhat,fval,exitflag] = fminunc(L,x0,options);
 [f,dfdx,d2fdx2] = neglogpost_4p(xhat,p,grd,M2d);
 HH = d2fdx2;

@@ -4,12 +4,12 @@ function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
     d2fdx2 = zeros(nip,nip);
     dx     = sqrt(-1)*eps.^3*eye(nip);
 
-    prior =    [-0.11;-0;1.70;2.85];
-    U     = d0([1/0.16;1/3.98;1/4.00;1/6.64]);
+    prior =    [-0.11;    0.32;    1.70;   5.00];
+    U     = d0([1/0.16; 1/2.98;  1/4.00; 1/6.64]);
     alpha = p.alpha;
     beta  = p.beta;
     p.r2  = 1.6;
-
+    p.r3  = 2.1;
     for ii = 1:nip
         x    = real(x)+dx(:,ii);
         p.b  = exp(x(1));
@@ -89,20 +89,20 @@ function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
     O = [p.POC(2:end);p.poc(2:end);p.Chl(2:end);...
         p.chl(2:end);p.Phyo(2:end);p.phyo(2:end)];
 
-    %figure(1)
-    %loglog(real(M),O,'*',[1e-8:10],[1e-8:10])
+    figure(1)
+    loglog(real(M),O,'*',[1e-8:10],[1e-8:10])
 
-    %xlim([1e-8,10]);
-    %ylim([1e-8,10]);
-    %r2 = rsquare(real(M),O);
-    %txt = sprintf('R^2 = %.2f',r2);
-    %text(0.01,1,txt)
-    %xlabel('Model prediction (\mumol L^-^1)','FontSize',16)
-    %ylabel('Observation (\mumol L^-^1)','FontSize',16)
-    %set(gca,'fontsize',16)
-    %set(findall(gca, 'Type', 'Line'),'LineWidth',2);
-    %print -depsc mod_vs_obs.eps
-    %keyboard
+    xlim([1e-8,10]);
+    ylim([1e-8,10]);
+    r2 = rsquare(real(M),O);
+    txt = sprintf('R^2 = %.2f',r2);
+    text(0.01,1,txt)
+    xlabel('Model prediction (\mumol L^-^1)','FontSize',16)
+    ylabel('Observation (\mumol L^-^1)','FontSize',16)
+    set(gca,'fontsize',16)
+    set(findall(gca, 'Type', 'Line'),'LineWidth',2);
+    print -depsc mod_vs_obs_eta_decrease.eps
+    keyboard
     %%++++++++++++++++++++++++++++++++++++++++++++++
 function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
 
