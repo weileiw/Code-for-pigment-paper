@@ -1,8 +1,8 @@
 #  Inverse model for inferring particle exchange rates
 
 The code here is to infering particle respiration rate constants along 
-with particle aggregation and disaggragation rate constant, by using Baysian 
-statistic method. The data used are from MedFlux program, and sampled using 
+with particle aggregation and disaggragation rate constants, by using Bayesian 
+inversion method. The data used here are from MedFlux program, and sampled using 
 large volume pumps. 
 
 ### Box_model.m
@@ -10,13 +10,13 @@ large volume pumps.
 **Use with neglogpost.m**
 
 This is the original model, with objective functions weighted using 
-data's own standard deviations. Large particle divergence is modeled
-based on Krist et al paper. Martin Curve exponential is optimized.
-Different from Krist et al paper *(**function buildPFD_v2.m**)* is 
-here we use particle 
-disaggregation rate constant as the loss term of large particles.
+data's own standard deviations. Large particle flux divergence is modeled
+based on Krist et al paper. Martin Curve exponential(*b*) is optimized.
+Different from Krist et al paper *(**function buildPFD_v2.m**)*, 
+we use particle disaggregation rate constant as the loss term of 
+large particles.
 
-What I found here is the respiration rate constant of both Chla and
+What we found here is the respiration rate constant of both Chla and
 phyeopigment are not well constrained because
 1) too much dependency on their priors.
 2) too large error bars.
@@ -51,6 +51,7 @@ Due to these issues, values of *d2* and *d3* are taken from references
 is optimized. 
 
 Here comes the following model
+(parameter denotation has conflicit with that in the paper, fix it!!!)
 
 ### Box_model_4p.m
 
