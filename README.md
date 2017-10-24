@@ -1,6 +1,6 @@
 #  Inverse model for inferring particle exchange rates
 
-The code here is to infering particle respiration rate constants along side 
+The code here is to infering particle respiration rate constants along 
 with particle aggregation and disaggragation rate constant, by using Baysian 
 statistic method. The data used are from MedFlux program, and sampled using 
 large volume pumps. 
