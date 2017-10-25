@@ -68,7 +68,7 @@ particle disaggregation rate constant (*b*).
 
 >*a*  = 4.64$^{1.46}_{1.11}$; 
 
->*b*  = 95.78$^{28.16}_{21.76}$; 
+>*d*  = 95.78$^{28.16}_{21.76}$; 
 
 This is the model that is finally used in the paper.
 
@@ -118,7 +118,7 @@ Sinking = 200 m/d
 
 > *a*   = 2.8700
 
-> *b*   = 229.9081
+> *d*   = 229.9081
 
 As in the variable sinking speed model, *d2* and *d3* are not well constrained by the model.
 
