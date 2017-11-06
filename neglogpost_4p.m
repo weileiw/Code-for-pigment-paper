@@ -1,3 +1,8 @@
+%+++++ function [f,dfdx,d2fdx2] = neglogpost(x,p,grd,M2d)
+% this function is used to calculated objective function
+% value(f), along with gradient(dfdx) and hessian(d2fdx2) 
+% towards parameters. x is a vector of parameters, p is a 
+% structure that contains data and constants.M2d is a mask.
 function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
 
     nip    = length(x);
@@ -8,8 +13,12 @@ function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
     U     = d0([1/0.16; 1/2.98;  1/4.00; 1/6.64]);
     alpha = p.alpha;
     beta  = p.beta;
-    p.r2  = 1.6;
-    p.r3  = 2.1;
+    p.r2  = 1.6;  % parameter taken from Wang et al.,(2017)
+    p.r3  = 2.1;  % parameter taken from Wang et al.,(2017)
+
+    % the gradient is calculated analytically.
+    % the for loop is used to calculated Hessian matrix by 
+    % using complex step method. 
     for ii = 1:nip
         x    = real(x)+dx(:,ii);
         p.b  = exp(x(1));
@@ -89,21 +98,26 @@ function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
     O = [p.POC(2:end);p.poc(2:end);p.Chl(2:end);...
         p.chl(2:end);p.Phyo(2:end);p.phyo(2:end)];
 
-    figure(1)
-    loglog(real(M),O,'*',[1e-8:10],[1e-8:10])
+    %%%%%%%% Comment this out of model versus observation plot %%%%%%%%%%
+    %figure(1)
+    %loglog(real(M),O,'*',[1e-8:10],[1e-8:10])
 
-    xlim([1e-8,10]);
-    ylim([1e-8,10]);
-    r2 = rsquare(real(M),O);
-    txt = sprintf('R^2 = %.2f',r2);
-    text(0.01,1,txt)
-    xlabel('Model prediction (\mumol L^-^1)','FontSize',16)
-    ylabel('Observation (\mumol L^-^1)','FontSize',16)
-    set(gca,'fontsize',16)
-    set(findall(gca, 'Type', 'Line'),'LineWidth',2);
-    print -depsc mod_vs_obs_eta_decrease.eps
-    keyboard
+    %xlim([1e-8,10]);
+    %ylim([1e-8,10]);
+    %r2 = rsquare(real(M),O);
+    %txt = sprintf('R^2 = %.2f',r2);
+    %text(0.01,1,txt)
+    %xlabel('Model prediction (\mumol L^-^1)','FontSize',16)
+    %ylabel('Observation (\mumol L^-^1)','FontSize',16)
+    %set(gca,'fontsize',16)
+    %set(findall(gca, 'Type', 'Line'),'LineWidth',2);
+    %print -depsc mod_vs_obs_eta_decrease.eps
+    %keyboard
     %%++++++++++++++++++++++++++++++++++++++++++++++
+    %%%%%%%% Comment this out of model versus observation plot %%%%%%%%%%
+
+    %%%%%%++++++function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
+    % function Pcycle output model field (M) and first derivative(D) 
 function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
 
     r1 = p.r1;

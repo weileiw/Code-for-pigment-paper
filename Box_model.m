@@ -28,13 +28,14 @@ jj = length(p.dp);
 M2d = ones(1,jj);
 
 grd = buildgrd(p,M2d);
-b  = 0.84;   % Martin Curve exponential
-r1 = 1;      % remineralization rate
-r2 = 1;      % remineralization rate
-r3 = 1;
-a  = 3;      % aggregation rate
-d  = 150;    % disaggregation rate
-p.eta = 0.9;     % coefficient to convert conc. to production rate
+p.b   = 0.84;   % Martin Curve exponential
+p.r1  = 1;      % small sized Chl a to phyeopigment rate constant [y^[-1]]
+p.r2  = 1;      % small sized POC remineralization rate [y^[-1]];
+p.r3  = 1;      % Phyeopigment reminearlization rate [y^[-1]];
+p.a   = 3;      % aggregation rate      [y^[-1]];
+p.d   = 150;    % disaggregation rate   [y^[-1]];
+
+p.eta = 1.0;     % coefficient to convert conc. to production rate
 
 load xhat_var_SV.mat
 
@@ -54,7 +55,7 @@ for jj = 1:length(X(:))
 
     p.alpha = X(jj);
     p.beta  = Y(jj);
-    
+
     L = @(x) neglogpost(x,p,grd,M2d);
 
     options = optimoptions(@fminunc,'Algorithm','trust-region',...

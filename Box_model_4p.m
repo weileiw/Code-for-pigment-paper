@@ -1,5 +1,19 @@
+% this script is used to load data, set up constants and 
+% parameters. It also sets up optimization conditions for 
+% Matlab routine fminunc. At the end, it calculates errorbars
+% for optimal parameter values and save them to file. 
 addpath('~/Dropbox/MOCM/WEILEI/myfunc')
 load DB2_May2005.mat
+p.dp   = depth;     % sampling depths.
+p.Chl  = Chla;      % large sized Chl a.
+p.POC  = POC;       % large sized particulate organic matter.
+p.Phyo = Phyeo;     % large sized phaeopigment.
+p.chl  = chla;      % small sized Chl a.
+p.poc  = poc;       % small sized particulated organic matter.
+p.phyo = phyeo;     % small sized phaeopigment.
+
+% calculate standard deviation for each data group. And
+% they will be used to normalize fitting errors for each group.
 p.dp   = depth;
 p.Chl  = Chla;
 p.POC  = POC;
@@ -7,14 +21,7 @@ p.Phyo = Phyeo;
 p.chl  = chla;
 p.poc  = poc;
 p.phyo = phyeo;
-% interpolate nan value in POC
-p.Chl_std  = std(p.Chl);
-p.chl_std  = std(p.chl);
-p.POC_std  = std(p.POC);
-p.poc_std  = std(p.poc);
-p.Phyo_std = std(p.Phyo);
-p.phyo_std = std(p.phyo);
-idata = length(p.Chl);
+% second per year
 spy      = 365*24*60*60;
 
 depth = p.dp;
@@ -23,16 +30,17 @@ M2d = ones(1,jj);
 
 grd = buildgrd(p,M2d);
 p.b   = 0.84;   % Martin Curve exponential
-p.r1  = 1;      % Chl_s to phyeopigment rate constant [y^[-1]]
-p.r2  = 1;      % POC_s remineralization rate [y^[-1]];
+p.r1  = 1;      % small sized Chl a to phyeopigment rate constant [y^[-1]]
+p.r2  = 1;      % small sized POC remineralization rate [y^[-1]];
 p.r3  = 1;      % Phyeopigment reminearlization rate [y^[-1]];
 p.a   = 3;      % aggregation rate      [y^[-1]];
 p.d   = 150;    % disaggregation rate   [y^[-1]];
 
-p.eta = 0.8;      % coefficient to convert conc. to production rate [dimensionless];
+p.eta = 1.0;      % coefficient to convert conc. to production rate [dimensionless];
 
 load xhat_4p_eta_decrease.mat
 
+% setting up grid search for alpha and beta.
 %alpha = linspace( 1,80,80); %range for testing eta;
 %beta  = linspace(16,40,50); %range for testing eta;
 %alpha = linspace(11,60,100); %range for eta = 1;
@@ -67,6 +75,7 @@ for jj = 1:length(X(:))
     logZ(jj) = -f-0.5*log(det(HH))+nip/2*log(p.alpha)+(6*idata)/2*log(p.beta);
 end
 
+%%%%%%%% Comment this out to get a contour plot for alpha and beta %%%%%%%%%%%%
 %figure(2)
 contourf(X,Y,logZ);colorbar
 %set(gca,'XTick',[0:1:10])
@@ -79,6 +88,11 @@ contourf(X,Y,logZ);colorbar
 xlabel('\Lambda-scaling factor for parameter')
 ylabel('\Gamma-scaling factor for data')
 set(gca,'fontsize',16)
+%%%%%%%%  Comment this out to get a contour plot for alpha and beta %%%%%%%%%%% 
+
+% finding optimal alpha and beta, recalculate
+% Hessian matrix based on them, and calculate error bars for
+% each parameter values.
 imax = find(logZ(:)==max(logZ(:)));
 p.alpha = X(imax);
 p.beta  = Y(imax);
