@@ -1,7 +1,10 @@
-%+++++ function [f,dfdx,d2fdx2] = neglogpost(x,p,grd,M2d)
-% this function is used to calculated objective function
+%+++++ this script contains two functions,
+% function [f,dfdx,d2fdx2] = neglogpost(x,p,grd,M2d) and
+% function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d);
+% this first function is used to calculated objective function
 % value(f), along with gradient(dfdx) and hessian(d2fdx2) 
-% towards parameters. x is a vector of parameters, p is a 
+% towards parameters with the output of the second function.
+% x is a vector of parameters, p is a 
 % structure that contains data and constants.M2d is a mask.
 function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
 
