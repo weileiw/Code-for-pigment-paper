@@ -1,14 +1,21 @@
+%+++++ function [f,dfdx,d2fdx2] = neglogpost(x,p,grd,M2d)
+% this function is used to calculated objective function
+% value(f), along with gradient(dfdx) and hessian(d2fdx2) 
+% towards parameters. x is a vector of parameters, p is a 
+% structure that contains data and constants.M2d is a mask.
 function [f,dfdx,d2fdx2] = neglogpost(x,p,grd,M2d)
 
 nip    = length(x);
 d2fdx2 = zeros(nip,nip);
 dx = sqrt(-1)*eps.^3*eye(nip);
-
+% prescribe prior and variance.
 prior = [-0.11;-1.15;-0;-0;1.70;5.85];
 U = d0([1/0.16;1/2.98;1/3.98;1/3.98;1/4.00;1/6.64]);
 alpha = p.alpha;
 beta  = p.beta;
 
+% the for loop is used to calculated Hessian matrix by 
+% using imaginary method. 
 for ii = 1:nip
   x = real(x)+dx(:,ii);
   p.b  = exp(x(1));
@@ -90,6 +97,7 @@ dfdx = real(dfdx);
 O = [p.POC(2:end);p.poc(2:end);p.Chl(2:end);...
      p.chl(2:end);p.Phyo(2:end);p.phyo(2:end)];
 
+%%%%%%%% Comment this out of model versus observation plot %%%%%%%%%%
 %figure(1)
 %loglog(real(M),O,'*',[1e-8:10],[1e-8:10])
 
@@ -101,7 +109,10 @@ O = [p.POC(2:end);p.poc(2:end);p.Chl(2:end);...
 %xlabel('Model prediction (\mumol L^-^1)')
 %ylabel('Observation (\mumol L^-^1)')
 %keyboard
+%%%%%%%% Comment this out of model versus observation plot %%%%%%%%%%
 %++++++++++++++++++++++++++++++++++++++++++++++
+
+
 function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
   
   r1 = p.r1;
