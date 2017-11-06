@@ -14,8 +14,9 @@ U = d0([1/0.16;1/2.98;1/3.98;1/3.98;1/4.00;1/6.64]);
 alpha = p.alpha;
 beta  = p.beta;
 
+% the gradient is calculated analytically.
 % the for loop is used to calculated Hessian matrix by 
-% using imaginary method. 
+% using complex step method. 
 for ii = 1:nip
   x = real(x)+dx(:,ii);
   p.b  = exp(x(1));
@@ -113,6 +114,8 @@ O = [p.POC(2:end);p.poc(2:end);p.Chl(2:end);...
 %++++++++++++++++++++++++++++++++++++++++++++++
 
 
+%%%%%%++++++function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
+% function Pcycle output model field (M) and first derivative(D) 
 function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
   
   r1 = p.r1;
