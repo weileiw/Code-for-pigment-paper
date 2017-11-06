@@ -73,6 +73,9 @@ particle disaggregation rate constant (*b*).
 This is the model that is finally used in the paper.
 
 
+The following two sets of model code do not have detailed
+annotations. Please refer to Box_model.m and Box_model_4p.m
+for information.
 ### Box_model_log.m
 
 **Use with neglogpost_log.m buildPFD_v2.m**
