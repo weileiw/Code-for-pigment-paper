@@ -11,7 +11,7 @@ function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
     nip    = length(x);
     d2fdx2 = zeros(nip,nip);
     dx     = sqrt(-1)*eps.^3*eye(nip);
-
+    
     prior =    [-0.11;    0.32;    1.70;   5.00];
     U     = d0([1/0.16; 1/2.98;  1/4.00; 1/6.64]);
     alpha = p.alpha;
@@ -30,7 +30,10 @@ function [f,dfdx,d2fdx2] = neglogpost_4p(x,p,grd,M2d)
         p.d  = exp(x(4));
 
         [PFD,dPFDdb,dPFDdd] = buildPFD_v2(M2d,p,grd);
-
+        %PFD(end,end) = PFD(end-1,end-1);
+        %dPFDdb(end,end) = dPFDdb(end-1,end-1);
+        %dPFDdd(end,end) = dPFDdd(end-1,end-1);
+        
         iocn = find(M2d(:));
         tmp  = M2d;
         tmp(:,1) = 0;
@@ -177,29 +180,29 @@ function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
     L66BU = L66(ib,:); L66BU = L66BU(:,iu);
     L33BU = L11BU; L34BU = L12BU; L43BU = L21BU;
     L55BU = L11BU; L56BU = L12BU; L65BU = L21BU;
-
-
+    
+    
     JBB = [[L11BB, L12BB,  LIBB,  LIBB,  LIBB,   LIBB];...%POC_l
-        [L21BB, L22BB,  LIBB,  LIBB,  LIBB,   LIBB];...%POC_s
-        [ LIBB,  LIBB, L33BB, L34BB,  LIBB,   LIBB];...%Chl_l
-        [ LIBB,  LIBB, L43BB, L44BB,  LIBB,   LIBB];...%Chl_s
-        [ LIBB,  LIBB,  LIBB,  LIBB, L55BB,  L56BB];...%Phe_l
-        [ LIBB,  LIBB,  LIBB, L64BB, L65BB,  L66BB]];  %Phe_s
-
+           [L21BB, L22BB,  LIBB,  LIBB,  LIBB,   LIBB];...%POC_s
+           [ LIBB,  LIBB, L33BB, L34BB,  LIBB,   LIBB];...%Chl_l
+           [ LIBB,  LIBB, L43BB, L44BB,  LIBB,   LIBB];...%Chl_s
+           [ LIBB,  LIBB,  LIBB,  LIBB, L55BB,  L56BB];...%Phe_l
+           [ LIBB,  LIBB,  LIBB, L64BB, L65BB,  L66BB]];  %Phe_s
+    
     JBU = [[L11BU, L12BU,  LIBU,  LIBU,  LIBU,  LIBU];...
-        [L21BU, L22BU,  LIBU,  LIBU,  LIBU,  LIBU];...
-        [ LIBU,  LIBU, L33BU, L34BU,  LIBU,  LIBU];...
-        [ LIBU,  LIBU, L43BU, L44BU,  LIBU,  LIBU];...
-        [ LIBU,  LIBU,  LIBU,  LIBU, L55BU, L56BU];...
-        [ LIBU,  LIBU,  LIBU, L64BU, L65BU, L66BU]];
-
+           [L21BU, L22BU,  LIBU,  LIBU,  LIBU,  LIBU];...
+           [ LIBU,  LIBU, L33BU, L34BU,  LIBU,  LIBU];...
+           [ LIBU,  LIBU, L43BU, L44BU,  LIBU,  LIBU];...
+           [ LIBU,  LIBU,  LIBU,  LIBU, L55BU, L56BU];...
+           [ LIBU,  LIBU,  LIBU, L64BU, L65BU, L66BU]];
+    
     poc = M2d;chl = M2d;phyo = M2d;
     POC = M2d;Chl = M2d;Phyo = M2d;
     poc(iocn) = p.poc; chl(iocn) = p.chl; phyo(iocn) = p.phyo; 
     POC(iocn) = p.POC; Chl(iocn) = p.Chl; Phyo(iocn) = p.Phyo;
-
+    
     OBS = [POC(iocn(iu)); poc(iocn(iu)); Chl(iocn(iu));...
-        chl(iocn(iu));Phyo(iocn(iu));phyo(iocn(iu))];
+           chl(iocn(iu));Phyo(iocn(iu));phyo(iocn(iu))];
 
     FM     = mfactor(JBB);
     rhs    = -JBU*OBS*eta;
@@ -248,43 +251,43 @@ function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
     dL65BUdd = dL21BUdd;
 
     dJBBdd = [[dL11BBdd, LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_l
-        [dL21BBdd, LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_s
-        [ LIBB,    LIBB,  dL33BBdd, LIBB,  LIBB,      LIBB];...%Chl_l
-        [ LIBB,    LIBB,  dL43BBdd, LIBB,  LIBB,      LIBB];...%Chl_s
-        [ LIBB,    LIBB,  LIBB,     LIBB,  dL55BBdd,  LIBB];...%Phe_l
-        [ LIBB,    LIBB,  LIBB,     LIBB,  dL65BBdd,  LIBB]];  %Phe_s
-
+              [dL21BBdd, LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_s
+              [ LIBB,    LIBB,  dL33BBdd, LIBB,  LIBB,      LIBB];...%Chl_l
+              [ LIBB,    LIBB,  dL43BBdd, LIBB,  LIBB,      LIBB];...%Chl_s
+              [ LIBB,    LIBB,  LIBB,     LIBB,  dL55BBdd,  LIBB];...%Phe_l
+              [ LIBB,    LIBB,  LIBB,     LIBB,  dL65BBdd,  LIBB]];  %Phe_s
+    
     dJBUdd = [[dL11BUdd, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
-        [dL21BUdd, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
-        [    LIBU, LIBU,  dL33BUdd, LIBU,  LIBU,     LIBU];...
-        [    LIBU, LIBU,  dL43BUdd, LIBU,  LIBU,     LIBU];...
-        [    LIBU, LIBU,  LIBU,     LIBU,  dL55BUdd, LIBU];...
-        [    LIBU, LIBU,  LIBU,     LIBU,  dL65BUdd, LIBU]];
-
+              [dL21BUdd, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
+              [    LIBU, LIBU,  dL33BUdd, LIBU,  LIBU,     LIBU];...
+              [    LIBU, LIBU,  dL43BUdd, LIBU,  LIBU,     LIBU];...
+              [    LIBU, LIBU,  LIBU,     LIBU,  dL55BUdd, LIBU];...
+              [    LIBU, LIBU,  LIBU,     LIBU,  dL65BUdd, LIBU]];
+    
 
     % dJdb-------------------
     dL11BBdb = dL11db(ib,:); dL11BBdb = dL11BBdb(:,ib);
     dL33BBdb = dL11BBdb;
     dL55BBdb = dL11BBdb;
-
+    
     dL11BUdb = dL11db(ib,:); dL11BUdb = dL11BUdb(:,iu);  
     dL33BUdb = dL11BUdb;
     dL55BUdb = dL11BUdb;
-
+    
     dJBBdb = [[dL11BBdb, LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_l
-        [ LIBB,    LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_s
-        [ LIBB,    LIBB,  dL33BBdb, LIBB,  LIBB,      LIBB];...%Chl_l
-        [ LIBB,    LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%Chl_s
-        [ LIBB,    LIBB,  LIBB,     LIBB,  dL55BBdb,  LIBB];...%Phe_l
-        [ LIBB,    LIBB,  LIBB,     LIBB,  LIBB,      LIBB]];  %Phe_s
-
+              [ LIBB,    LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_s
+              [ LIBB,    LIBB,  dL33BBdb, LIBB,  LIBB,      LIBB];...%Chl_l
+              [ LIBB,    LIBB,  LIBB,     LIBB,  LIBB,      LIBB];...%Chl_s
+              [ LIBB,    LIBB,  LIBB,     LIBB,  dL55BBdb,  LIBB];...%Phe_l
+              [ LIBB,    LIBB,  LIBB,     LIBB,  LIBB,      LIBB]];  %Phe_s
+    
     dJBUdb = [[dL11BUdb, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
-        [    LIBU, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
-        [    LIBU, LIBU,  dL33BUdb, LIBU,  LIBU,     LIBU];...
-        [    LIBU, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
-        [    LIBU, LIBU,  LIBU,     LIBU,  dL55BUdb, LIBU];...
-        [    LIBU, LIBU,  LIBU,     LIBU,  LIBU,     LIBU]];
-
+              [    LIBU, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
+              [    LIBU, LIBU,  dL33BUdb, LIBU,  LIBU,     LIBU];...
+              [    LIBU, LIBU,  LIBU,     LIBU,  LIBU,     LIBU];...
+              [    LIBU, LIBU,  LIBU,     LIBU,  dL55BUdb, LIBU];...
+              [    LIBU, LIBU,  LIBU,     LIBU,  LIBU,     LIBU]];
+    
     % dJda ---------------------
     dL12BBda = dL12da(ib,:); dL12BBda = dL12BBda(:,ib);
     dL34BBda = dL12BBda;
@@ -301,82 +304,82 @@ function [M,D] = Pcycle(p,PFD,dPFDdb,dPFDdd,M2d)
     dL66BUda = dL22BUda;
 
     dJBBda = [[LIBB, dL12BBda,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_l
-        [LIBB, dL22BBda,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_s
-        [LIBB,     LIBB,  LIBB, dL34BBda,  LIBB,      LIBB];...%Chl_l
-        [LIBB,     LIBB,  LIBB, dL44BBda,  LIBB,      LIBB];...%Chl_s
-        [LIBB,     LIBB,  LIBB,     LIBB,  LIBB,  dL56BBda];...
-        [LIBB,     LIBB,  LIBB,     LIBB,  LIBB,  dL66BBda]];  %Phe_s
-
+              [LIBB, dL22BBda,  LIBB,     LIBB,  LIBB,      LIBB];...%POC_s
+              [LIBB,     LIBB,  LIBB, dL34BBda,  LIBB,      LIBB];...%Chl_l
+              [LIBB,     LIBB,  LIBB, dL44BBda,  LIBB,      LIBB];...%Chl_s
+              [LIBB,     LIBB,  LIBB,     LIBB,  LIBB,  dL56BBda];...
+              [LIBB,     LIBB,  LIBB,     LIBB,  LIBB,  dL66BBda]];  %Phe_s
+    
     dJBUda = [[LIBU, dL12BUda,  LIBU,     LIBU,  LIBU,     LIBU];...
-        [LIBU, dL22BUda,  LIBU,     LIBU,  LIBU,     LIBU];...
-        [LIBU,     LIBU,  LIBU, dL34BUda,  LIBU,     LIBU];...
-        [LIBU,     LIBU,  LIBU, dL44BUda,  LIBU,     LIBU];...
-        [LIBU,     LIBU,  LIBU,     LIBU,  LIBU, dL56BUda];...
-        [LIBU,     LIBU,  LIBU,     LIBU,  LIBU, dL66BUda]];
-
+              [LIBU, dL22BUda,  LIBU,     LIBU,  LIBU,     LIBU];...
+              [LIBU,     LIBU,  LIBU, dL34BUda,  LIBU,     LIBU];...
+              [LIBU,     LIBU,  LIBU, dL44BUda,  LIBU,     LIBU];...
+              [LIBU,     LIBU,  LIBU,     LIBU,  LIBU, dL56BUda];...
+              [LIBU,     LIBU,  LIBU,     LIBU,  LIBU, dL66BUda]];
+    
     % dJdr1 ---------------
     dL22BBdr1 = dL22dr1(ib,:); dL22BBdr1 = dL22BBdr1(:,ib);
     dL22BUdr1 = dL22dr1(ib,:); dL22BUdr1 = dL22BUdr1(:,iu);
-
+    
     dJBBdr1 = [[LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB];...%POC_l
-        [LIBB, dL22BBdr1,  LIBB, LIBB, LIBB, LIBB];...%POC_s
-        [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB];...%Chl_l
-        [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB];...%Chl_s
-        [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB];...%Phe_l
-        [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB]];  %Phe_s
-
+               [LIBB, dL22BBdr1,  LIBB, LIBB, LIBB, LIBB];...%POC_s
+               [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB];...%Chl_l
+               [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB];...%Chl_s
+               [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB];...%Phe_l
+               [LIBB,      LIBB,  LIBB, LIBB, LIBB, LIBB]];  %Phe_s
+    
     dJBUdr1 = [[LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU];...
-        [LIBU, dL22BUdr1, LIBU, LIBU, LIBU, LIBU];...
-        [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU];...
-        [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU];...
-        [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU];...
-        [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU]];
-
-
+               [LIBU, dL22BUdr1, LIBU, LIBU, LIBU, LIBU];...
+               [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU];...
+               [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU];...
+               [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU];...
+               [LIBU,      LIBU, LIBU, LIBU, LIBU, LIBU]];
+    
+    
     % dJdr2 ----------------
     dL66BBdr2 = dL66dr2(ib,:); dL66BBdr2 = dL66BBdr2(:,ib);
     dL66BUdr2 = dL66dr2(ib,:); dL66BUdr2 = dL66BUdr2(:,iu);
-
+    
     dJBBdr2 = [[LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%POC_l
-        [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%POC_s
-        [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%Chl_l
-        [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%Chl_s
-        [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%Phe_l
-        [LIBB, LIBB, LIBB, LIBB,  LIBB, dL66BBdr2]];  %Phe_s
-
+               [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%POC_s
+               [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%Chl_l
+               [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%Chl_s
+               [LIBB, LIBB, LIBB, LIBB,  LIBB,      LIBB];...%Phe_l
+               [LIBB, LIBB, LIBB, LIBB,  LIBB, dL66BBdr2]];  %Phe_s
+    
     dJBUdr2 = [[LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
-        [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
-        [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
-        [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
-        [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
-        [LIBU, LIBU, LIBU, LIBU,  LIBU, dL66BUdr2]];
-
-
+               [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
+               [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
+               [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
+               [LIBU, LIBU, LIBU, LIBU,  LIBU,      LIBU];...
+               [LIBU, LIBU, LIBU, LIBU,  LIBU, dL66BUdr2]];
+    
+    
     % dJdr3 ---------------
     dL44BBdr3 = dL44dr3(ib,:); dL44BBdr3 = dL44BBdr3(:,ib);
     dL44BUdr3 = dL44dr3(ib,:); dL44BUdr3 = dL44BUdr3(:,iu);
-
+    
     dL64BBdr3 = dL64dr3(ib,:); dL64BBdr3 = dL64BBdr3(:,ib);
     dL64BUdr3 = dL64dr3(ib,:); dL64BUdr3 = dL64BUdr3(:,iu);
-
+    
     dJBBdr3 = [[LIBB, LIBB,  LIBB, LIBB,      LIBB, LIBB];...%POC_l
-        [LIBB, LIBB,  LIBB, LIBB,      LIBB, LIBB];...%POC_s
-        [LIBB, LIBB,  LIBB, LIBB,      LIBB, LIBB];...%Chl_l
-        [LIBB, LIBB,  LIBB, dL44BBdr3, LIBB, LIBB];...%Chl_s
-        [LIBB, LIBB,  LIBB, LIBB,      LIBB, LIBB];...%Phe_l
-        [LIBB, LIBB,  LIBB, dL64BBdr3, LIBB, LIBB]];  %Phe_s
-
+               [LIBB, LIBB,  LIBB, LIBB,      LIBB, LIBB];...%POC_s
+               [LIBB, LIBB,  LIBB, LIBB,      LIBB, LIBB];...%Chl_l
+               [LIBB, LIBB,  LIBB, dL44BBdr3, LIBB, LIBB];...%Chl_s
+               [LIBB, LIBB,  LIBB, LIBB,      LIBB, LIBB];...%Phe_l
+               [LIBB, LIBB,  LIBB, dL64BBdr3, LIBB, LIBB]];  %Phe_s
+    
     dJBUdr3 = [[LIBU, LIBU,  LIBU,      LIBU,  LIBU, LIBU];...
-        [LIBU, LIBU,  LIBU,      LIBU,  LIBU, LIBU];...
-        [LIBU, LIBU,  LIBU,      LIBU,  LIBU, LIBU];...
-        [LIBU, LIBU,  LIBU, dL44BUdr3,  LIBU, LIBU];...
-        [LIBU, LIBU,  LIBU,      LIBU,  LIBU, LIBU];...
-        [LIBU, LIBU,  LIBU, dL64BUdr3,  LIBU, LIBU]];
-
-
+               [LIBU, LIBU,  LIBU,      LIBU,  LIBU, LIBU];...
+               [LIBU, LIBU,  LIBU,      LIBU,  LIBU, LIBU];...
+               [LIBU, LIBU,  LIBU, dL44BUdr3,  LIBU, LIBU];...
+               [LIBU, LIBU,  LIBU,      LIBU,  LIBU, LIBU];...
+               [LIBU, LIBU,  LIBU, dL64BUdr3,  LIBU, LIBU]];
+    
+    
     D = -mfactor(FM,[dJBUdb*N+dJBBdb*M,...
-        dJBUdr1*N+dJBBdr1*M,...
-        dJBUda*N+dJBBda*M,...
-        dJBUdd*N+dJBBdd*M]);
-
+                     dJBUdr1*N+dJBBdr1*M,...
+                     dJBUda*N+dJBBda*M,...
+                     dJBUdd*N+dJBBdd*M]);
+    
 

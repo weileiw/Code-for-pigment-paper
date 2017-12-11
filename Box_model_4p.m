@@ -15,12 +15,12 @@ p.phyo = phyeo;     % small sized phaeopigment.
 % calculate standard deviation for each data group. And
 % they will be used to normalize fitting errors for each group.
 p.dp   = depth;
-p.Chl  = Chla;
-p.POC  = POC;
-p.Phyo = Phyeo;
-p.chl  = chla;
-p.poc  = poc;
-p.phyo = phyeo;
+p.Chl_std  = std(Chla);
+p.POC_std  = std(POC);
+p.Phyo_std = std(Phyeo);
+p.chl_std  = std(chla);
+p.poc_std  = std(poc);
+p.phyo_std = std(phyeo);
 % second per year
 spy      = 365*24*60*60;
 
@@ -38,7 +38,7 @@ p.d   = 150;    % disaggregation rate   [y^[-1]];
 
 p.eta = 1.0;      % coefficient to convert conc. to production rate [dimensionless];
 
-load xhat_4p_eta_decrease.mat
+load xhat_4p.mat
 
 % setting up grid search for alpha and beta.
 %alpha = linspace( 1,80,80); %range for testing eta;
@@ -56,6 +56,7 @@ x0 = R.xhat;
 x0  = log(x0);
 nip = length(x0);
 
+idata = length(depth)-1;
 for jj = 1:length(X(:))
 
     p.alpha = X(jj);
@@ -110,4 +111,4 @@ R.xhat = exp(xhat);
 R.alpha = p.alpha;
 R.beta = p.beta;
 fname = sprintf('xhat_4p');
-save(fname,'R');
+%save(fname,'R');
